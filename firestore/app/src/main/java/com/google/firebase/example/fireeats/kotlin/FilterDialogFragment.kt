@@ -122,8 +122,8 @@ class FilterDialogFragment : DialogFragment() {
     override fun onAttach(context: Context) {
         super.onAttach(context)
 
-        if (context is FilterListener) {
-            filterListener = context
+        if (parentFragment is FilterListener) {
+            filterListener = parentFragment as FilterListener
         }
     }
 
@@ -144,7 +144,7 @@ class FilterDialogFragment : DialogFragment() {
     }
 
     fun resetFilters() {
-        binding.let {
+        _binding?.let {
             it.spinnerCategory.setSelection(0)
             it.spinnerCity.setSelection(0)
             it.spinnerPrice.setSelection(0)
