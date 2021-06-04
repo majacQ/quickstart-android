@@ -5,12 +5,13 @@ buildscript {
         mavenLocal()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:4.0.1'
-        classpath 'org.jetbrains.kotlin:kotlin-gradle-plugin:1.4.10'
+        classpath 'com.android.tools.build:gradle:4.1.3'
+        classpath 'org.jetbrains.kotlin:kotlin-gradle-plugin:1.4.32'
 
-        classpath 'com.google.gms:google-services:4.3.4'
-        classpath 'com.google.firebase:perf-plugin:1.3.1'
-        classpath 'com.google.firebase:firebase-crashlytics-gradle:2.3.0'
+        classpath 'com.google.gms:google-services:4.3.5'
+        classpath 'com.google.firebase:perf-plugin:1.3.5'
+        classpath 'com.google.firebase:firebase-crashlytics-gradle:2.5.2'
+        classpath 'androidx.navigation:navigation-safe-args-gradle-plugin:2.3.5'
     }
 }
 
@@ -27,26 +28,26 @@ allprojects {
     }
 
     def isNonStable = { candidate ->
-        return ['alpha', 'beta', 'rc', 'SNAPSHOT'].any { word ->
-            return candidate.version.contains(word)
+        return ['alpha', 'beta', 'rc', 'snapshot', '-m'].any { word ->
+            return candidate.version.toLowerCase().contains(word)
         }
     }
 
-    def isBlackListed = { candidate ->
-        def blacklist = [
+    def isBlocked = { candidate ->
+        def blocklist = [
                 'androidx.browser:browser',
                 'com.facebook.android',
                 'com.google.guava',
                 'com.github.bumptech.glide'
         ]
-        return blacklist.any { word ->
+        return blocklist.any { word ->
             return candidate.toString().contains(word)
         }
     }
 
     dependencyUpdates {
         rejectVersionIf {
-            isNonStable(it.candidate) || isBlackListed(it.candidate)
+            isNonStable(it.candidate) || isBlocked(it.candidate)
         }
     }
 }
